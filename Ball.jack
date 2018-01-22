@@ -1,0 +1,61 @@
+/**
+Functionality for drawing and moving a ball.
+*/
+
+class Ball {
+
+   // coordinates of center
+   field int x, y; 
+   field int radius; 
+
+
+   constructor Ball new(int Ax, int Ay, int Aradius) {
+      let x = Ax;
+      let y = Ay;
+      let radius = Aradius;
+      do draw();
+      return this;
+   }
+
+
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+
+   method void draw() {
+      do drawOrErase(true);
+      return;
+   }
+
+   method void erase() {
+      do drawOrErase(false);
+      return;	  
+   }
+
+   method void drawOrErase(boolean color) {
+      do Screen.setColor(color);
+      do Screen.drawCircle(x, y, radius);
+      return;
+   }
+
+   /** move by the specified x and y displacements */
+   method void move(int xDelta, int yDelta) {
+      var int newY;
+      var int newX;
+      do erase();
+      let newY = y + yDelta;
+      if ((newY > radius) & (newY < (255 - radius))) {
+      	 let y = newY;
+      }	      	   	  
+      let newX = x + xDelta;
+      if ((newX > radius) & (newX < (511 - radius))) {
+      	 let x = newX;
+      }
+      do draw();
+      return;      
+   }
+
+
+}

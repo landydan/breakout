@@ -1,0 +1,51 @@
+
+/** Testing */
+class Main {
+
+    function void main() {
+       var Ball ball;
+       var int xDelta;
+       var int yDelta;
+       var char key;  // the key currently pressed by the user
+       var boolean exit;
+       let exit = false;
+
+       let ball = Ball.new(100,100,10);
+      
+      while (~exit) {
+         // waits for a key to be pressed
+         while (key = 0) {
+            let key = Keyboard.keyPressed();
+         }
+     	 // q for quit
+         if (key = 81)  { let exit = true; }
+         // up arrow
+         if (key = 131) { 
+	    let xDelta = 0; 
+	    let yDelta = -1;
+	 }   
+	 // down arrow
+         if (key = 133) { 
+	    let xDelta = 0; 
+	    let yDelta = 1;
+	 }
+	 // left arrow
+         if (key = 130) { 
+	    let xDelta = -1; 
+	    let yDelta = 0;
+	 }
+	 // right arrow
+         if (key = 132) { 
+	    let xDelta = 1; 
+	    let yDelta = 0;
+	 }
+        do ball.move(xDelta, yDelta);
+      	// delay
+	do Sys.wait(5);
+	let key = 0;  
+     }		 
+
+	do ball.dispose();
+      	return;
+    }
+}
