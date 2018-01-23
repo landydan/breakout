@@ -1,0 +1,59 @@
+/** 
+The paddle controlled by the player.
+
+This code was mostly stolen from the Square class
+provided in the NandToTetris course.
+*/
+class Paddle {
+
+   // screen location of the paddle's top-left corner
+   field int x, y; 
+   
+   // paddle dimentions
+   field int height, width; 
+   
+
+   constructor Paddle new(int Ax, int Ay, int w) {
+      let x = Ax;
+      let y = Ay;
+      let width = w;
+      let height = 5;
+      do draw();
+      return this;
+   }
+
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   method void draw() {
+      do Screen.setColor(true);
+      do Screen.drawRectangle(x, y, x + width, y + height);
+      return;
+   }
+
+   /** Moves the paddle left by 2 pixels */
+   method void moveLeft() {
+      if (x > 1) {
+         do Screen.setColor(false);
+         do Screen.drawRectangle((x + width) - 1, y, x + width, y + height);
+         let x = x - 2;
+         do Screen.setColor(true);
+         do Screen.drawRectangle(x, y, x + 1, y + height);
+      }
+      return;
+   }
+
+   /** Moves the paddle right by 2 pixels. */
+   method void moveRight() {
+      if ((x + width) < 510) {
+         do Screen.setColor(false);
+         do Screen.drawRectangle(x, y, x + 1, y + height);
+         let x = x + 2;
+         do Screen.setColor(true);
+         do Screen.drawRectangle((x + width) - 1, y, x + width, y + height);
+      }
+      return;
+   }
+}

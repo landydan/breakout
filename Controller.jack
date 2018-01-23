@@ -1,0 +1,78 @@
+
+/** Testing */
+class Controller {
+
+   field char leftKey, rightKey, quitKey;
+   field int xDelta, yDelta;   
+   field Ball ball;
+   field Paddle paddle;
+
+   constructor Controller new() {
+      var int paddleWidth;
+      let leftKey = 130;
+      let rightKey = 132;
+      let quitKey = 81;
+      let xDelta = 1;
+      let yDelta = 2;      
+
+      let ball = Ball.new(10,10,8);
+      let paddleWidth = 50;
+      let paddle = Paddle.new(250,250,paddleWidth);
+      return this;
+   }
+
+
+   method void play() {
+       var char key;  
+       var boolean exit;
+       let exit = false;
+
+      while (~exit) {
+         // waits for a key to be pressed
+         while (key = 0) {
+	    do moveBall();   
+            let key = Keyboard.keyPressed();
+         }
+     	 // q for quit
+         if (key = quitKey)  { 
+	    let exit = true; 
+	 }
+
+         if (key = leftKey) { 
+	    do paddle.moveLeft();
+	 }
+         if (key = rightKey) { 
+	    do paddle.moveRight();
+	 }
+	 do moveBall();
+	let key = 0;  
+     }		 
+
+	do ball.dispose();
+	do paddle.dispose();
+      	return;
+    }
+
+    method void moveBall() {
+    	var int newX, newY;
+	let newX = (ball.getX()) + xDelta;
+	let newY = (ball.getY()) + yDelta;   
+    	if ((newX < 10) | (newX > 500)) {
+	   let xDelta = -xDelta;
+	}   
+    	if ((newY < 10) | (newY > 245)) {
+	   let yDelta = -yDelta;
+	}   
+
+    	do ball.move(xDelta, yDelta);   
+      	// delay
+	do Sys.wait(10);
+	return;
+    }
+
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+}
