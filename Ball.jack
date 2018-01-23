@@ -57,5 +57,12 @@ class Ball {
       return;      
    }
 
+   method int getX() {
+     return x; 	  
+   }
+
+   method int getY() {
+     return y; 	  
+   }
 
 }
