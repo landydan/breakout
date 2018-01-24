@@ -6,6 +6,7 @@ class Controller {
    field int xDelta, yDelta;   
    field Ball ball;
    field Paddle paddle;
+   field Wall wall;
 
    constructor Controller new() {
       var int paddleWidth;
@@ -18,6 +19,7 @@ class Controller {
       let ball = Ball.new(10,10,8);
       let paddleWidth = 50;
       let paddle = Paddle.new(250,250,paddleWidth);
+      let wall = Wall.new(5, 8, 0);
       return this;
    }
 

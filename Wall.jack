@@ -1,0 +1,66 @@
+
+/** The wall, made up of bricks that disappear when hit by the ball.  */
+class Wall {
+
+   field int rows, brickHeight, brickWidth, topSpacePixels, widthOffset; 
+
+   constructor Wall new(int r, int bh, int off) {
+      // harcoding the width at 16 because it's a convenient number for graphics optimization
+      let brickWidth = 16;
+
+      // also hardcoding the space above the wall, for now
+      let topSpacePixels = 50;
+
+      let rows = r;
+      let brickHeight = bh;
+      let widthOffset = off;
+      do createWall();
+      return this;
+   }
+
+   method void createWall() {
+      var int rowCounter;
+      let rowCounter = 0;
+
+      while (rowCounter < rows) {
+         do createRow(rowCounter);
+	 let rowCounter = rowCounter + 1;
+      }
+      return;
+   }
+
+   method void createRow(int rowCounter) {
+      var int brickCounter;
+      var int numBricks;
+      let numBricks = (512/brickWidth) - (2*widthOffset);
+      
+      let brickCounter = widthOffset;
+      while (brickCounter < numBricks) {
+         do drawBrick(rowCounter, brickCounter, true);
+	 let brickCounter = brickCounter + 1;
+      }
+      return;
+   }
+
+
+   method void drawBrick(int rowCounter, int brickCounter, boolean color) {
+      var int topLeftX, topLeftY;
+      do Screen.setColor(color);
+      let topLeftX = brickCounter * brickWidth;
+      let topLeftY = topSpacePixels + (rowCounter * brickHeight);
+      /*
+      do Output.moveCursor(18,18);
+      do Output.printInt(topLeftX);
+      do Output.moveCursor(20,20);
+      do Output.printInt(topLeftY);
+      */
+      do Screen.drawRectangle(topLeftX, topLeftY, topLeftX + brickWidth - 1, topLeftY + brickHeight - 1);
+      return;
+   }
+
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+}

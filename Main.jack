@@ -2,8 +2,6 @@
 /** Testing */
 class Main {
 
-
-
     function void main() {
         var Controller controller;  
     	let controller = Controller.new();
