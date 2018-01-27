@@ -16,7 +16,7 @@ class Controller {
       let xDelta = 1;
       let yDelta = 2;      
 
-      let ball = Ball.new(10,10,8);
+      let ball = Ball.new(100,100,8);
       let paddleWidth = 50;
       let paddle = Paddle.new(250,250,paddleWidth);
       let wall = Wall.new(5, 8, 0);
@@ -51,20 +51,57 @@ class Controller {
      }		 
 
 	do ball.dispose();
-	do paddle.dispose();
       	return;
     }
 
     method void moveBall() {
-    	var int newX, newY;
-	let newX = (ball.getX()) + xDelta;
-	let newY = (ball.getY()) + yDelta;   
-    	if ((newX < 10) | (newX > 500)) {
+    	
+	// these represent the anticipated new "corners" of the ball if
+	// it continues to move in the current direction   
+	var int leftX, leftY, rightX, rightY, topX, topY, bottomX, bottomY;
+
+	let leftX = ball.getLeftX() + xDelta;
+	let leftY = ball.getLeftY() + yDelta;
+	let rightX = ball.getRightX() + xDelta;
+	let rightY = ball.getRightY() + yDelta;
+	let topX = ball.getTopX() + xDelta;
+	let topY = ball.getTopY() + yDelta;
+	let bottomX = ball.getBottomX() + xDelta;
+	let bottomY = ball.getBottomY() + yDelta;
+
+	// ball is hitting the left or right side border, so reverse its x direction
+	if ((leftX < 1) | (rightX > 511)) {
 	   let xDelta = -xDelta;
 	}   
-    	if ((newY < 10) | (newY > 245)) {
+
+	// ball is hitting the top or bottom border
+    	if ((topY < 1) | (bottomY > 254)) {
 	   let yDelta = -yDelta;
 	}   
+/*	
+	// left side of the ball or right side of the ball hits the brick wall
+	if ((wall.hitBrickAtPoint(leftX, leftY)) | (wall.hitBrickAtPoint(rightX, rightY))) {
+	   let xDelta = - xDelta;         
+	}
+
+	// top or bottom of the ball hits the brick wall
+	if ((wall.hitBrickAtPoint(topX, topY)) | (wall.hitBrickAtPoint(bottomX, bottomY))) {
+	   let yDelta = - yDelta;         
+	}	
+*/
+
+	// temporary debugging
+	do Output.moveCursor(20, 1);
+	do Output.printString("X");
+	do Output.moveCursor(20, 4);
+	do Output.printInt(ball.getX());
+
+	do Output.moveCursor(21, 1);
+	do Output.printString("XD");
+	do Output.moveCursor(21, 4);
+	do Output.printInt(xDelta);
+
+
 
     	do ball.move(xDelta, yDelta);   
       	// delay
@@ -73,6 +110,8 @@ class Controller {
     }
 
    method void dispose() {
+      do paddle.dispose();
+      do wall.dispose();
       do Memory.deAlloc(this);
       return;
    }

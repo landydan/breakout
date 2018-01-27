@@ -2,18 +2,25 @@
 /** The wall, made up of bricks that disappear when hit by the ball.  */
 class Wall {
 
-   field int rows, brickHeight, brickWidth, topSpacePixels, widthOffset; 
+   field int rows, brickHeight, brickWidth, topY, widthOffset; 
+   
+   field int bottomY;
 
    constructor Wall new(int r, int bh, int off) {
       // harcoding the width at 16 because it's a convenient number for graphics optimization
       let brickWidth = 16;
 
       // also hardcoding the space above the wall, for now
-      let topSpacePixels = 50;
+      let topY = 50;
+
 
       let rows = r;
       let brickHeight = bh;
       let widthOffset = off;
+
+      // cache this value so we don't need to keep recalculating it
+      let bottomY = topY + (rows * brickHeight) - 1;
+
       do createWall();
       return this;
    }
@@ -43,11 +50,11 @@ class Wall {
    }
 
 
-   method void drawBrick(int rowCounter, int brickCounter, boolean color) {
+   method void drawBrick(int row, int brickNumber, boolean color) {
       var int topLeftX, topLeftY;
       do Screen.setColor(color);
-      let topLeftX = brickCounter * brickWidth;
-      let topLeftY = topSpacePixels + (rowCounter * brickHeight);
+      let topLeftX = brickNumber * brickWidth;
+      let topLeftY = topY + (row * brickHeight);
       /*
       do Output.moveCursor(18,18);
       do Output.printInt(topLeftX);
@@ -57,6 +64,42 @@ class Wall {
       do Screen.drawRectangle(topLeftX, topLeftY, topLeftX + brickWidth - 1, topLeftY + brickHeight - 1);
       return;
    }
+
+   /**
+   Instead of maintaining an array to keep track of which bricks exist,
+   we'll just look at the screen to see if the value is -1 (brick exists) or 0.
+   This works because our bricks have a width of 16 and therefore every memory
+   address used to represent the brick is either all zeros or all ones.
+   
+   To erase the brick we find it with some arithmetic and then call the draw method
+   with color off.
+   */
+   method boolean hitBrickAtPoint(int x, int y) {
+
+      var int address;	       
+      var int value;
+      var int row;
+      var int brickNumber;
+     
+      // out of range, so don't bother looking for the brick
+      if ((y < bottomY) | (y > topY)) {
+         return false;
+      }	 
+      let address = 16384 + (y*32) + (x/16);
+      let value = Memory.peek(address);
+      if (value = 0) {
+         return false;
+      } else {
+         // erase the brick and return 0
+	 let row = (y - topY)/brickHeight;
+	 let brickNumber = x/16;
+	 do drawBrick(row, brickNumber, false);
+         return true;
+      }  
+   }
+
+
+
 
    method void dispose() {
       do Memory.deAlloc(this);

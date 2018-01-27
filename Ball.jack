@@ -46,16 +46,49 @@ class Ball {
       var int newX;
       do erase();
       let newY = y + yDelta;
-      if ((newY > radius) & (newY < (255 - radius))) {
+      if ((newY > radius) & (newY < (256 - radius))) {
       	 let y = newY;
       }	      	   	  
       let newX = x + xDelta;
-      if ((newX > radius) & (newX < (511 - radius))) {
+      if ((newX > radius) & (newX < (512 - radius))) {
       	 let x = newX;
       }
       do draw();
       return;      
    }
+
+   method int getLeftX() {
+      return x - radius;
+   }   
+
+   method int getLeftY() {
+      return y;
+   }   
+
+   method int getRightX() {
+      return x + radius;
+   }   
+
+   method int getRightY() {
+      return y;
+   }   
+
+   method int getTopX() {
+      return x;
+   }
+
+   method int getTopY() {
+      return y - radius;
+   }
+
+   method int getBottomX() {
+      return x;
+   }   
+
+   method int getBottomY() {
+      return y + radius;	  
+   }   
+
 
    method int getX() {
      return x; 	  
