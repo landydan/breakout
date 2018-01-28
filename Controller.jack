@@ -78,7 +78,7 @@ class Controller {
     	if ((topY < 1) | (bottomY > 254)) {
 	   let yDelta = -yDelta;
 	}   
-/*	
+	
 	// left side of the ball or right side of the ball hits the brick wall
 	if ((wall.hitBrickAtPoint(leftX, leftY)) | (wall.hitBrickAtPoint(rightX, rightY))) {
 	   let xDelta = - xDelta;         
@@ -88,9 +88,9 @@ class Controller {
 	if ((wall.hitBrickAtPoint(topX, topY)) | (wall.hitBrickAtPoint(bottomX, bottomY))) {
 	   let yDelta = - yDelta;         
 	}	
-*/
 
 	// temporary debugging
+	/*
 	do Output.moveCursor(20, 1);
 	do Output.printString("X");
 	do Output.moveCursor(20, 4);
@@ -100,7 +100,7 @@ class Controller {
 	do Output.printString("XD");
 	do Output.moveCursor(21, 4);
 	do Output.printInt(xDelta);
-
+	*/
 
 
     	do ball.move(xDelta, yDelta);   

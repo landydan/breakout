@@ -13,7 +13,6 @@ class Wall {
       // also hardcoding the space above the wall, for now
       let topY = 50;
 
-
       let rows = r;
       let brickHeight = bh;
       let widthOffset = off;
@@ -80,13 +79,18 @@ class Wall {
       var int value;
       var int row;
       var int brickNumber;
+
+      // do debug(bottomY, topY);
      
       // out of range, so don't bother looking for the brick
-      if ((y < bottomY) | (y > topY)) {
+      if ((y > bottomY) | (y < topY)) {
+      	 // do debug(-99, -99);
          return false;
       }	 
       let address = 16384 + (y*32) + (x/16);
       let value = Memory.peek(address);
+      // do debug(address, value);
+      // do Sys.wait(1000);
       if (value = 0) {
          return false;
       } else {
@@ -98,7 +102,15 @@ class Wall {
       }  
    }
 
+   method void debug(int address, int value) {
+   	// temporary debugging
+	do Output.moveCursor(18, 1); 
+	do Output.printInt(address);
 
+	do Output.moveCursor(20, 1);
+	do Output.printInt(value);
+	return;
+   }
 
 
    method void dispose() {
