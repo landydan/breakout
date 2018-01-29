@@ -2,9 +2,9 @@
 /** The wall, made up of bricks that disappear when hit by the ball.  */
 class Wall {
 
-   field int rows, brickHeight, brickWidth, topY, widthOffset; 
-   
-   field int bottomY;
+   field int rows, brickHeight, brickWidth, widthOffset; 
+   field int topY, bottomY;
+   field Pixel pixel;
 
    constructor Wall new(int r, int bh, int off) {
       // harcoding the width at 16 because it's a convenient number for graphics optimization
@@ -21,6 +21,7 @@ class Wall {
       let bottomY = topY + (rows * brickHeight) - 1;
 
       do createWall();
+      let pixel = Pixel.new();
       return this;
    }
 
@@ -75,23 +76,29 @@ class Wall {
    */
    method boolean hitBrickAtPoint(int x, int y) {
 
-      var int address;	       
-      var int value;
+      var int address, pixelIndex;	       
+      var int wordValue, pixelValue;
       var int row;
       var int brickNumber;
 
-      // do debug(bottomY, topY);
-     
       // out of range, so don't bother looking for the brick
       if ((y > bottomY) | (y < topY)) {
       	 // do debug(-99, -99);
          return false;
       }	 
       let address = 16384 + (y*32) + (x/16);
-      let value = Memory.peek(address);
-      // do debug(address, value);
+      let wordValue = Memory.peek(address);
+      // the pixelIndex is the remainder when x is divided by 16
+      let pixelIndex = x - (16 * (x/16)) ;
+      let pixelValue = pixel.getBitAtIndex(wordValue, pixelIndex);
+      
+      do Debug.print(14, "P", pixelValue);
+      do Debug.print(15, "INX", x);
+      do Debug.print(16, "INY", y);
+      do Debug.print(17, "A", address);
+      do Debug.print(18, "V", wordValue);
       // do Sys.wait(1000);
-      if (value = 0) {
+      if (pixelValue = 0) {
          return false;
       } else {
          // erase the brick and return 0

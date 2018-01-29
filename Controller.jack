@@ -79,29 +79,31 @@ class Controller {
 	   let yDelta = -yDelta;
 	}   
 	
-	// left side of the ball or right side of the ball hits the brick wall
-	if ((wall.hitBrickAtPoint(leftX, leftY)) | (wall.hitBrickAtPoint(rightX, rightY))) {
+	// ball is moving left and hits the wall on its left side
+	if ((xDelta < 0) & (wall.hitBrickAtPoint(leftX, leftY))) {
 	   let xDelta = - xDelta;         
 	}
 
-	// top or bottom of the ball hits the brick wall
-	if ((wall.hitBrickAtPoint(topX, topY)) | (wall.hitBrickAtPoint(bottomX, bottomY))) {
+	// ball is moving right and hits the wall on its right side
+	if ((xDelta > 0) & (wall.hitBrickAtPoint(rightX, rightY))) {
+	   let xDelta = - xDelta;         
+	}
+
+	// ball is moving up and hits the wall on its top edge
+	if ((yDelta < 0) & (wall.hitBrickAtPoint(topX, topY))) {
 	   let yDelta = - yDelta;         
-	}	
+	}
+
+	// ball is moving down and hits the wall on its bottom edge
+	if ((yDelta > 0) & (wall.hitBrickAtPoint(bottomX, bottomY))) {
+	   let yDelta = - yDelta;         
+	}
 
 	// temporary debugging
-	/*
-	do Output.moveCursor(20, 1);
-	do Output.printString("X");
-	do Output.moveCursor(20, 4);
-	do Output.printInt(ball.getX());
-
-	do Output.moveCursor(21, 1);
-	do Output.printString("XD");
-	do Output.moveCursor(21, 4);
-	do Output.printInt(xDelta);
-	*/
-
+	do Debug.print(19,"X", ball.getX()); 
+	do Debug.print(20,"Y", ball.getY()); 
+	do Debug.print(21,"XD", xDelta); 
+	do Debug.print(22,"YD", yDelta); 
 
     	do ball.move(xDelta, yDelta);   
       	// delay
