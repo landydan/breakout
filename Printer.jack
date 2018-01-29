@@ -1,0 +1,31 @@
+/**
+Debugging utility
+*/
+
+class Printer {
+
+   function void debug(int row, String label, int value) {
+      var String blank;
+      let blank = "          ";
+      do Output.moveCursor(row, 1);
+      do Output.printString(blank);
+      do Output.moveCursor(row, 1);
+      do Output.printString(label);
+      do label.dispose();
+
+      do Output.moveCursor(row, 5);
+      do Output.printInt(value);
+
+      do blank.dispose();
+      return; 	  
+   }
+
+    function void showMessage(int row, String message) {
+       do Output.moveCursor(row, 0);
+       do Output.printString(message);
+       do message.dispose();
+       return;
+    }
+
+
+}

@@ -3,22 +3,24 @@
 class Controller {
 
    field char leftKey, rightKey, quitKey;
-   field int xDelta, yDelta;   
+   field int xDelta, yDelta;
+   field int delay;   
    field Ball ball;
    field Paddle paddle;
    field Wall wall;
 
-   constructor Controller new() {
+   constructor Controller new(int pw, int d) {
       var int paddleWidth, paddleHeight;
+      let paddleWidth = pw;
+      let paddleHeight = 5;
+      let delay = d;
+
       let leftKey = 130;
       let rightKey = 132;
-      let quitKey = 81;
       let xDelta = 1;
       let yDelta = 2;      
 
       let ball = Ball.new(100,100,8);
-      let paddleWidth = 511;
-      let paddleHeight = 5;
       let paddle = Paddle.new(paddleWidth, paddleHeight);
       let wall = Wall.new(5, 8, 0);
       return this;
@@ -37,10 +39,6 @@ class Controller {
 	    let ballInPlay = moveBall();   
             let key = Keyboard.keyPressed();
          }
-     	 // q for quit
-         if (key = quitKey)  { 
-	    let exit = true; 
-	 }
 
          if (key = leftKey) { 
 	    do paddle.moveLeft();
@@ -117,15 +115,17 @@ class Controller {
 	
 
 	// temporary debugging
+	/*
 	do Debug.print(19,"X", ball.getX()); 
 	do Debug.print(20,"Y", ball.getY()); 
 	do Debug.print(21,"XD", xDelta); 
 	do Debug.print(22,"YD", yDelta); 
+	*/
 
 	if (ballInPlay) {
     	   do ball.move(xDelta, yDelta);
 	   // delay
-	   do Sys.wait(20);
+	   do Sys.wait(delay);
    	}
 	return ballInPlay;
     }

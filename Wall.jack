@@ -83,7 +83,6 @@ class Wall {
 
       // out of range, so don't bother looking for the brick
       if ((y > bottomY) | (y < topY)) {
-      	 // do debug(-99, -99);
          return false;
       }	 
       let address = 16384 + (y*32) + (x/16);
@@ -92,12 +91,15 @@ class Wall {
       let pixelIndex = x - (16 * (x/16)) ;
       let pixelValue = pixel.getBitAtIndex(wordValue, pixelIndex);
       
-      do Debug.print(14, "P", pixelValue);
-      do Debug.print(15, "INX", x);
-      do Debug.print(16, "INY", y);
-      do Debug.print(17, "A", address);
-      do Debug.print(18, "V", wordValue);
+      /* temporary debugging
+      do Printer.debug(14, "P", pixelValue);
+      do Printer.debug(15, "INX", x);
+      do Printer.debug(16, "INY", y);
+      do Printer.debug(17, "A", address);
+      do Printer.debug(18, "V", wordValue);
       // do Sys.wait(1000);
+      */
+      
       if (pixelValue = 0) {
          return false;
       } else {
@@ -108,17 +110,6 @@ class Wall {
          return true;
       }  
    }
-
-   method void debug(int address, int value) {
-   	// temporary debugging
-	do Output.moveCursor(18, 1); 
-	do Output.printInt(address);
-
-	do Output.moveCursor(20, 1);
-	do Output.printInt(value);
-	return;
-   }
-
 
    method void dispose() {
       do Memory.deAlloc(this);

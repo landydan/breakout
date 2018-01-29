@@ -4,9 +4,60 @@ class Main {
 
     function void main() {
         var Controller controller;  
-    	let controller = Controller.new();
-	do controller.play();     
-	do controller.dispose();
+	var int paddleWidth, delay;	
+	var String message;
+	var char key;	
+	var boolean newGame;
+
+	let newGame = true;
+	while (newGame) {
+	   do Printer.showMessage(0, "BREAKOUT!");
+	   do Printer.showMessage(2, "Use the left and right arrow keys to move the paddle.");
+	   do Printer.showMessage(4, "The angle of bounce depends on where you hit the ball.");
+	   do Printer.showMessage(6, "Press any key to continue");	
+
+	   do Main.waitForKey();
+	   do Screen.clearScreen();
+	   do Sys.wait(1000);
+
+	   do Output.moveCursor(0,0);
+	   let message = "Enter integer between 10 and 512 for paddle width (suggested:50)";
+	   let paddleWidth = Keyboard.readInt(message);
+	   let message = "Enter integer between 0 and 50 for delay (suggested: 30)";
+	   let delay = Keyboard.readInt(message);
+	   do message.dispose();
+
+	   do Screen.clearScreen();
+	   do Printer.showMessage(0, "Press any key to begin");	
+	   do Main.waitForKey();
+	   
+	   do Screen.clearScreen();
+    	   let controller = Controller.new(paddleWidth, delay);
+	   do controller.play();     
+	   do controller.dispose();
+	   
+	   do Printer.showMessage(0, "Play Again?  Hit y for Yes, n for No");
+	   let key = 0;
+	   while (~((key = 78) | (key = 89))) {
+	      let key = Main.waitForKey();
+	   }
+	   if (~(key = 89)) {
+  	      let newGame = false;
+	   }
+	}
+	do Screen.clearScreen();
+	do Printer.showMessage(0, "GOODBYE!");
+	do Sys.wait(3000);
       	return;
     }
+
+    function char waitForKey() {
+       var char k;
+       let k = 0;
+       while (k = 0) {
+          let k = Keyboard.keyPressed();
+       }
+       return k;
+    }
+
 }
