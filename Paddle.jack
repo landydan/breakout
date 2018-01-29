@@ -13,11 +13,12 @@ class Paddle {
    field int height, width; 
    
 
-   constructor Paddle new(int Ax, int Ay, int w) {
-      let x = Ax;
-      let y = Ay;
+   constructor Paddle new(int w, int h) {
       let width = w;
-      let height = 5;
+      let height = h;
+      // center the paddle 
+      let x = (511 - width)/2;
+      let y = 255 - height;
       do draw();
       return this;
    }
@@ -56,4 +57,17 @@ class Paddle {
       }
       return;
    }
+
+   method int getHeight() {
+      return height;
+   }
+
+   method int getLeftX() {
+      return x;
+   }
+
+   method int getRightX() {
+      return (x + width - 1);
+   }
+
 }
