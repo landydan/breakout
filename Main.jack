@@ -7,7 +7,7 @@ class Main {
 	var int paddleWidth, delay;	
 	var String message;
 	var char key;	
-	var boolean newGame;
+	var boolean gameWon, newGame;
 
 	let newGame = true;
 	while (newGame) {
@@ -33,10 +33,15 @@ class Main {
 	   
 	   do Screen.clearScreen();
     	   let controller = Controller.new(paddleWidth, delay);
-	   do controller.play();     
+	   let gameWon = controller.play();     
 	   do controller.dispose();
-	   
-	   do Printer.showMessage(0, "Play Again?  Hit y for Yes, n for No");
+
+	   let message = "Sorry, the game is over";
+	   if (gameWon) {
+	      let message = "YOU WIN!!!";
+	   }
+	   do Printer.showMessage(0, message);
+	   do Printer.showMessage(2, "Play Again?  Hit y for Yes, n for No");
 	   let key = 0;
 	   while (~((key = 78) | (key = 89))) {
 	      let key = Main.waitForKey();
@@ -47,7 +52,7 @@ class Main {
 	}
 	do Screen.clearScreen();
 	do Printer.showMessage(0, "GOODBYE!");
-	do Sys.wait(3000);
+	do Sys.wait(2000);
       	return;
     }
 

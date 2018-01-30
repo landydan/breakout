@@ -1,10 +1,28 @@
 
-/** The wall, made up of bricks that disappear when hit by the ball.  */
+/** 
+The wall, made up of bricks that disappear when hit by the ball.  
+This is a simple implementation that does not allow for much customization
+in terms of number and dimensions of bricks, etc.
+The "brickHeight" could be specified, but the user-interface does not provide that option currently.
+Similarly,  "widthOffset" was built in to allow for a user to ask for a wall that does not
+extend across the width of the entire screen (to make the game easier),
+but in the end I did not implement a way for the user to specify this, so it is always zero. 
+
+I considered using a 2-dimensional array to keep trick of all the bricks (and whether they exist),
+but in the end I handled the existence check for a brick by looking at the pixel where the ball was
+hitting it and checking its value in memory:  a 1 means the brick is there.
+This is actually less easy to understand and perhaps less robust that using the array, but it does
+demonstrate the use of direct memory operations to find a particular address, and bit-masking to determine
+the value of a particular pixel.
+
+*/
+
 class Wall {
 
    field int rows, brickHeight, brickWidth, widthOffset; 
    field int topY, bottomY;
    field Pixel pixel;
+   field int brickCount;
 
    constructor Wall new(int r, int bh, int off) {
       // harcoding the width at 16 because it's a convenient number for graphics optimization
@@ -20,6 +38,7 @@ class Wall {
       // cache this value so we don't need to keep recalculating it
       let bottomY = topY + (rows * brickHeight) - 1;
 
+      let brickCount = 0;
       do createWall();
       let pixel = Pixel.new();
       return this;
@@ -37,14 +56,16 @@ class Wall {
    }
 
    method void createRow(int rowCounter) {
-      var int brickCounter;
+      var int brickNumber;
       var int numBricks;
       let numBricks = (512/brickWidth) - (2*widthOffset);
       
-      let brickCounter = widthOffset;
-      while (brickCounter < numBricks) {
-         do drawBrick(rowCounter, brickCounter, true);
-	 let brickCounter = brickCounter + 1;
+      let brickNumber = widthOffset;
+      while (brickNumber < numBricks) {
+         do drawBrick(rowCounter, brickNumber, true);
+	 let brickNumber = brickNumber + 1;
+	 // keep a running total
+	 let brickCount = brickCount + 1;
       }
       return;
    }
@@ -91,15 +112,18 @@ class Wall {
       let pixelIndex = x - (16 * (x/16)) ;
       let pixelValue = pixel.getBitAtIndex(wordValue, pixelIndex);
       
-      /* temporary debugging
+      //temporary debugging
       do Printer.debug(14, "P", pixelValue);
       do Printer.debug(15, "INX", x);
       do Printer.debug(16, "INY", y);
       do Printer.debug(17, "A", address);
       do Printer.debug(18, "V", wordValue);
+      do Printer.debug(19, "C", brickCount);
       // do Sys.wait(1000);
-      */
+      //
       
+
+
       if (pixelValue = 0) {
          return false;
       } else {
@@ -107,8 +131,13 @@ class Wall {
 	 let row = (y - topY)/brickHeight;
 	 let brickNumber = x/16;
 	 do drawBrick(row, brickNumber, false);
+	 let brickCount = brickCount - 1;
          return true;
       }  
+   }
+
+   method boolean bricksRemain() {
+      return (brickCount > 0);
    }
 
    method void dispose() {

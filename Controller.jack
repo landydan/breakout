@@ -7,7 +7,11 @@ class Controller {
    field int delay;   
    field Ball ball;
    field Paddle paddle;
-   field Wall wall;
+   field Wall wall;   
+
+   /**
+   * Build the wall and the paddle and set initial parameters
+   */
 
    constructor Controller new(int pw, int d) {
       var int paddleWidth, paddleHeight;
@@ -25,14 +29,20 @@ class Controller {
       return this;
    }
 
-   method void play() {
+   /**
+   * Play the specified number of balls.
+   * Return true if the wall was destroyed.
+   */
+
+   method boolean play() {
       var int totalBalls, ballCounter;
       var String message;
       var char counterString;
+
       let totalBalls = 3;
       let ballCounter = 1;
 
-      while (ballCounter < (totalBalls + 1)) {
+      while ((wall.bricksRemain()) & (ballCounter < (totalBalls + 1))) {
          let message = "Ball Number  ";  
 	 do message.setCharAt(12, (48 + ballCounter));    	    
          do Printer.showMessage(0, message);
@@ -41,7 +51,7 @@ class Controller {
          do playOneBall();
 	 let ballCounter = ballCounter + 1;
       } 
-      return;	  
+      return ~(wall.bricksRemain());	  
    }
 
    method void playOneBall() {
@@ -71,6 +81,16 @@ class Controller {
 	do ball.dispose();
       	return;
     }
+
+    /**
+    * Move the ball according to its current direction coordinates.
+    * Handle the following events:
+    *    Hitting the side borders and bouncing off.
+    *    Hitting the wall and bouncing off (the wall will handle the brick removal).
+    *    Hitting the paddle and bouncing off.
+    *    Hitting the ground and stopping.
+    * Return true if the ball is still in play.
+    */
 
     method boolean moveBall() {
     	
@@ -138,6 +158,8 @@ class Controller {
 	do Printer.debug(21,"XD", xDelta); 
 	do Printer.debug(22,"YD", yDelta); 
 	*/
+
+	let ballInPlay = (ballInPlay & (wall.bricksRemain()));
 
 	if (ballInPlay) {
     	   do ball.move(xDelta, yDelta);
