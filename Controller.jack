@@ -20,20 +20,36 @@ class Controller {
       let xDelta = 1;
       let yDelta = 2;      
 
-      let ball = Ball.new(100,100,8);
       let paddle = Paddle.new(paddleWidth, paddleHeight);
       let wall = Wall.new(5, 8, 0);
       return this;
    }
 
-
    method void play() {
-       var char key;  
-       var boolean ballInPlay, exit;
-       let exit = false;
-       let ballInPlay = true;
+      var int totalBalls, ballCounter;
+      var String message;
+      var char counterString;
+      let totalBalls = 3;
+      let ballCounter = 1;
 
-      while (~exit) {
+      while (ballCounter < (totalBalls + 1)) {
+         let message = "Ball Number  ";  
+	 do message.setCharAt(12, (48 + ballCounter));    	    
+         do Printer.showMessage(0, message);
+	 do Sys.wait(1000);
+	 do Printer.showMessage(0, "               ");
+         do playOneBall();
+	 let ballCounter = ballCounter + 1;
+      } 
+      return;	  
+   }
+
+   method void playOneBall() {
+      var char key;  
+      var boolean ballInPlay, exit;
+      let ball = Ball.new(100,100,8);
+      let ballInPlay = true; 	   
+      while (ballInPlay) {
          // waits for a key to be pressed
          while (ballInPlay & (key = 0)) {
 	    let ballInPlay = moveBall();   
@@ -49,10 +65,9 @@ class Controller {
 	    }
 	    let ballInPlay = moveBall();
 	 }
-	 let exit = ~ballInPlay;
 	 let key = 0;  
-     }		 
-
+     }
+        do ball.erase();		 
 	do ball.dispose();
       	return;
     }
