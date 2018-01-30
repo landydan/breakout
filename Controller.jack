@@ -40,13 +40,15 @@ class Controller {
             let key = Keyboard.keyPressed();
          }
 
-         if (key = leftKey) { 
-	    do paddle.moveLeft();
+	 if (ballInPlay) {
+            if (key = leftKey) { 
+	       do paddle.moveLeft();
+	    }
+            if (key = rightKey) { 
+	       do paddle.moveRight();
+	    }
+	    let ballInPlay = moveBall();
 	 }
-         if (key = rightKey) { 
-	    do paddle.moveRight();
-	 }
-	 let ballInPlay = moveBall();
 	 let exit = ~ballInPlay;
 	 let key = 0;  
      }		 
@@ -103,8 +105,8 @@ class Controller {
 	}
 
 
-	// ball is hitting the paddle
-	if ((bottomY > (254 - paddle.getHeight())) & (bottomX > (paddle.getLeftX() - 1)) & (bottomX < (paddle.getRightX() + 1)) ) {
+	// ball is moving down and hitting the paddle
+	if ((yDelta > 0) &  (bottomY > (254 - paddle.getHeight())) & (bottomX > (paddle.getLeftX() - 1)) & (bottomX < (paddle.getRightX() + 1)) ) {
 	   let yDelta = -yDelta;
 	} else {
 	  // ball is hitting the ground
@@ -116,10 +118,10 @@ class Controller {
 
 	// temporary debugging
 	/*
-	do Debug.print(19,"X", ball.getX()); 
-	do Debug.print(20,"Y", ball.getY()); 
-	do Debug.print(21,"XD", xDelta); 
-	do Debug.print(22,"YD", yDelta); 
+	do Printer.debug(19,"X", ball.getX()); 
+	do Printer.debug(20,"Y", ball.getY()); 
+	do Printer.debug(21,"XD", xDelta); 
+	do Printer.debug(22,"YD", yDelta); 
 	*/
 
 	if (ballInPlay) {
