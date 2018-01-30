@@ -4,9 +4,6 @@ The wall, made up of bricks that disappear when hit by the ball.
 This is a simple implementation that does not allow for much customization
 in terms of number and dimensions of bricks, etc.
 The "brickHeight" could be specified, but the user-interface does not provide that option currently.
-Similarly,  "widthOffset" was built in to allow for a user to ask for a wall that does not
-extend across the width of the entire screen (to make the game easier),
-but in the end I did not implement a way for the user to specify this, so it is always zero. 
 
 I considered using a 2-dimensional array to keep trick of all the bricks (and whether they exist),
 but in the end I handled the existence check for a brick by looking at the pixel where the ball was
@@ -14,26 +11,27 @@ hitting it and checking its value in memory:  a 1 means the brick is there.
 This is actually less easy to understand and perhaps less robust that using the array, but it does
 demonstrate the use of direct memory operations to find a particular address, and bit-masking to determine
 the value of a particular pixel.
-
 */
 
 class Wall {
 
-   field int rows, brickHeight, brickWidth, widthOffset; 
+   field int rows, brickHeight, brickWidth, bricksPerRow; 
    field int topY, bottomY;
    field Pixel pixel;
    field int brickCount;
+   field Array bricks;
 
-   constructor Wall new(int r, int bh, int off) {
+   constructor Wall new(int r, int bh) {
+      // choose a width that's a divisor of 512, for simplicity
       // harcoding the width at 16 because it's a convenient number for graphics optimization
       let brickWidth = 16;
+      let bricksPerRow = 512/brickWidth;
 
       // also hardcoding the space above the wall, for now
       let topY = 50;
 
       let rows = r;
       let brickHeight = bh;
-      let widthOffset = off;
 
       // cache this value so we don't need to keep recalculating it
       let bottomY = topY + (rows * brickHeight) - 1;
@@ -47,27 +45,29 @@ class Wall {
    method void createWall() {
       var int rowCounter;
       let rowCounter = 0;
+      let bricks = Array.new(rows);
 
       while (rowCounter < rows) {
-         do createRow(rowCounter);
+         let bricks[rowCounter] = createRow(rowCounter);
 	 let rowCounter = rowCounter + 1;
       }
       return;
    }
 
-   method void createRow(int rowCounter) {
+   method Array createRow(int rowCounter) {
       var int brickNumber;
-      var int numBricks;
-      let numBricks = (512/brickWidth) - (2*widthOffset);
-      
-      let brickNumber = widthOffset;
-      while (brickNumber < numBricks) {
+      var Array brickRow;
+
+      let brickRow = Array.new(bricksPerRow);      
+      let brickNumber = 0;
+      while (brickNumber < bricksPerRow) {
          do drawBrick(rowCounter, brickNumber, true);
+	 let brickRow[brickNumber] = true;
 	 let brickNumber = brickNumber + 1;
 	 // keep a running total
 	 let brickCount = brickCount + 1;
       }
-      return;
+      return brickRow;
    }
 
 
@@ -87,52 +87,43 @@ class Wall {
    }
 
    /**
-   Instead of maintaining an array to keep track of which bricks exist,
-   we'll just look at the screen to see if the value is -1 (brick exists) or 0.
-   This works because our bricks have a width of 16 and therefore every memory
-   address used to represent the brick is either all zeros or all ones.
-   
+   Find the brick at the given point and if it exists, erase it and mark it so.
+   Return true in this case, so the caller knows to bounce the ball.   
    To erase the brick we find it with some arithmetic and then call the draw method
    with color off.
    */
+   
    method boolean hitBrickAtPoint(int x, int y) {
-
-      var int address, pixelIndex;	       
-      var int wordValue, pixelValue;
       var int row;
       var int brickNumber;
+      var array rowArray;
 
       // out of range, so don't bother looking for the brick
       if ((y > bottomY) | (y < topY)) {
          return false;
       }	 
-      let address = 16384 + (y*32) + (x/16);
-      let wordValue = Memory.peek(address);
-      // the pixelIndex is the remainder when x is divided by 16
-      let pixelIndex = x - (16 * (x/16)) ;
-      let pixelValue = pixel.getBitAtIndex(wordValue, pixelIndex);
+      let row = (y - topY)/brickHeight;
+      let brickNumber = x/brickWidth;
       
-      //temporary debugging
+
+      /* temporary debugging
       do Printer.debug(14, "P", pixelValue);
       do Printer.debug(15, "INX", x);
       do Printer.debug(16, "INY", y);
       do Printer.debug(17, "A", address);
       do Printer.debug(18, "V", wordValue);
       do Printer.debug(19, "C", brickCount);
-      // do Sys.wait(1000);
-      //
+      */
       
-
-
-      if (pixelValue = 0) {
-         return false;
-      } else {
+      let rowArray = bricks[row];
+      if (rowArray[brickNumber]) {
          // erase the brick and return 0
-	 let row = (y - topY)/brickHeight;
-	 let brickNumber = x/16;
+	 let rowArray[brickNumber] = false;
 	 do drawBrick(row, brickNumber, false);
 	 let brickCount = brickCount - 1;
          return true;
+      } else {
+         return false;
       }  
    }
 
@@ -141,8 +132,19 @@ class Wall {
    }
 
    method void dispose() {
+      var int k;
+      var Array rowArray;
+
+      let k = 0;
+      while (k < rows) {
+         let rowArray = bricks[k];
+	 do rowArray.dispose();
+	 let k = k + 1;
+      }
+      do bricks.dispose();        	  
       do Memory.deAlloc(this);
       return;
    }
 
 }
+

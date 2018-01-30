@@ -25,7 +25,7 @@ class Controller {
       let yDelta = 2;      
 
       let paddle = Paddle.new(paddleWidth, paddleHeight);
-      let wall = Wall.new(5, 8, 0);
+      let wall = Wall.new(5, 8);
       return this;
    }
 
