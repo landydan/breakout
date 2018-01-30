@@ -1,17 +1,15 @@
 
-/** 
+/******************************************************************************************** 
 The wall, made up of bricks that disappear when hit by the ball.  
 This is a simple implementation that does not allow for much customization
 in terms of number and dimensions of bricks, etc.
 The "brickHeight" could be specified, but the user-interface does not provide that option currently.
 
-I considered using a 2-dimensional array to keep trick of all the bricks (and whether they exist),
-but in the end I handled the existence check for a brick by looking at the pixel where the ball was
-hitting it and checking its value in memory:  a 1 means the brick is there.
-This is actually less easy to understand and perhaps less robust that using the array, but it does
-demonstrate the use of direct memory operations to find a particular address, and bit-masking to determine
-the value of a particular pixel.
-*/
+A 2-dimensional array is used to keep track of which bricks exist and which have been removed.
+Originally I tried doing it without this array -- determining whether a brick was there by looking
+directly at the memory representing it on screen.  But this proved to be not robust, because the
+ball itself would sometimes get in the way.
+*********************************************************************************************/
 
 class Wall {
 
@@ -76,22 +74,17 @@ class Wall {
       do Screen.setColor(color);
       let topLeftX = brickNumber * brickWidth;
       let topLeftY = topY + (row * brickHeight);
-      /*
-      do Output.moveCursor(18,18);
-      do Output.printInt(topLeftX);
-      do Output.moveCursor(20,20);
-      do Output.printInt(topLeftY);
-      */
       do Screen.drawRectangle(topLeftX, topLeftY, topLeftX + brickWidth - 1, topLeftY + brickHeight - 1);
       return;
    }
 
-   /**
+
+   /******************************************************************************************** 
    Find the brick at the given point and if it exists, erase it and mark it so.
    Return true in this case, so the caller knows to bounce the ball.   
    To erase the brick we find it with some arithmetic and then call the draw method
    with color off.
-   */
+   ********************************************************************************************/
    
    method boolean hitBrickAtPoint(int x, int y) {
       var int row;
@@ -103,18 +96,7 @@ class Wall {
          return false;
       }	 
       let row = (y - topY)/brickHeight;
-      let brickNumber = x/brickWidth;
-      
-
-      /* temporary debugging
-      do Printer.debug(14, "P", pixelValue);
-      do Printer.debug(15, "INX", x);
-      do Printer.debug(16, "INY", y);
-      do Printer.debug(17, "A", address);
-      do Printer.debug(18, "V", wordValue);
-      do Printer.debug(19, "C", brickCount);
-      */
-      
+      let brickNumber = x/brickWidth;      
       let rowArray = bricks[row];
       if (rowArray[brickNumber]) {
          // erase the brick and return 0

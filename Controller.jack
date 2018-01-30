@@ -1,17 +1,20 @@
 
-/** Testing */
+/******************************************************************************************** 
+The main class for creating the game assets (wall, paddle, balls) and controlling the action.
+********************************************************************************************/
+
 class Controller {
 
-   field char leftKey, rightKey, quitKey;
+   field char leftKey, rightKey;
    field int xDelta, yDelta;
    field int delay;   
    field Ball ball;
    field Paddle paddle;
    field Wall wall;   
 
-   /**
-   * Build the wall and the paddle and set initial parameters
-   */
+/******************************************************************************************** 
+Build the wall and the paddle and set initial parameters
+********************************************************************************************/
 
    constructor Controller new(int pw, int d) {
       var int paddleWidth, paddleHeight;
@@ -29,10 +32,11 @@ class Controller {
       return this;
    }
 
-   /**
-   * Play the specified number of balls.
-   * Return true if the wall was destroyed.
-   */
+
+/******************************************************************************************** 
+Loop through the number of balls and launch the action for each new ball,
+as long as the wall still exists.
+********************************************************************************************/
 
    method boolean play() {
       var int totalBalls, ballCounter;
@@ -53,6 +57,13 @@ class Controller {
       } 
       return ~(wall.bricksRemain());	  
    }
+
+
+/******************************************************************************************** 
+This is where the action happens.
+As long as the current ball is in play, keep it moving by calling the moveBall method.
+Also listen for keypresses from the user, and move the paddle left and right accordingly.
+********************************************************************************************/
 
    method void playOneBall() {
       var char key;  
@@ -82,15 +93,15 @@ class Controller {
       	return;
     }
 
-    /**
-    * Move the ball according to its current direction coordinates.
-    * Handle the following events:
-    *    Hitting the side borders and bouncing off.
-    *    Hitting the wall and bouncing off (the wall will handle the brick removal).
-    *    Hitting the paddle and bouncing off.
-    *    Hitting the ground and stopping.
-    * Return true if the ball is still in play.
-    */
+/******************************************************************************************** 
+Move the ball according to its current direction coordinates.
+Handle the following events:
+      Hitting the side borders and bouncing off.
+      Hitting the wall and bouncing off (the wall will handle the brick removal).
+      Hitting the paddle and bouncing off.
+      Hitting the ground and stopping.
+Return true if the ball is still in play.
+********************************************************************************************/
 
     method boolean moveBall() {
     	
@@ -139,7 +150,6 @@ class Controller {
 	   }
 	}
 
-
 	// ball is moving down and hitting the paddle
 	if ((yDelta > 0) &  (bottomY > (254 - paddle.getHeight())) & (bottomX > (paddle.getLeftX() - 1)) & (bottomX < (paddle.getRightX() + 1)) ) {
 	   let yDelta = -yDelta;
@@ -149,7 +159,6 @@ class Controller {
 	      let ballInPlay = false;
 	   }
 	}
-	
 
 	// temporary debugging
 	/*

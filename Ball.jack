@@ -1,13 +1,17 @@
-/**
-Functionality for drawing and moving a ball.
-*/
 
+/******************************************************************************************** 
+The game ball.
+
+This is implemented by using the OS Screen.drawCircle() method.
+A faster implementation might be to write directly into screen memory,
+but this is quite tricky if the ball needs to support movement in various directions
+by a single pixel at a time.
+If the ball moved only in 16-pixel increments, a bit-map approach would work.
+********************************************************************************************/
 class Ball {
 
-   // coordinates of center
    field int x, y; 
    field int radius; 
-
 
    constructor Ball new(int Ax, int Ay, int Aradius) {
       let x = Ax;

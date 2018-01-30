@@ -1,5 +1,11 @@
 
-/** Testing */
+/******************************************************************************************** 
+Initiates a BREAKOUT session by accepting some game parameters from the user and
+instantiating a Controller to begin a new game.
+When the game ends, we report back whether it was a win or not, and then give the user
+the option to play again.
+********************************************************************************************/
+
 class Main {
 
     function void main() {
@@ -21,7 +27,7 @@ class Main {
 	   do Sys.wait(1000);
 
 	   do Output.moveCursor(0,0);
-	   let message = "Enter integer between 10 and 512 for paddle width (suggested:50)";
+	   let message = "Enter integer between 10 and 511 for paddle width (suggested:60)";
 	   let paddleWidth = Keyboard.readInt(message);
 	   let message = "Enter integer between 0 and 50 for delay (suggested: 30)";
 	   let delay = Keyboard.readInt(message);

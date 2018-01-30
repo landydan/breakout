@@ -1,9 +1,12 @@
-/** 
+
+/******************************************************************************************** 
 The paddle controlled by the player.
 
 This code was mostly stolen from the Square class
 provided in the NandToTetris course.
-*/
+********************************************************************************************/
+
+
 class Paddle {
 
    // screen location of the paddle's top-left corner
@@ -11,7 +14,6 @@ class Paddle {
    
    // paddle dimentions
    field int height, width; 
-   
 
    constructor Paddle new(int w, int h) {
       let width = w;
