@@ -4,6 +4,16 @@ Initiates a BREAKOUT session by accepting some game parameters from the user and
 instantiating a Controller to begin a new game.
 When the game ends, we report back whether it was a win or not, and then give the user
 the option to play again.
+
+This game could have been made highly configurable.  For example, the user could have options
+to choose things like the size of the bricks, the width and height of the wall, the size of 
+the ball, the number of balls, etc.  But ultimately I had to limit the scope, so I chose
+just 2 configuration parameters: delay (speed of game), and paddle width.
+With the right combination of these parameters, the user ought to be able to find the 
+right level of challenge.
+
+Note to Tester:  If you would like to see how the game plays out to the end,
+choose a paddle width of 511 (whole screen) and a low delay, like zero.
 ********************************************************************************************/
 
 class Main {
