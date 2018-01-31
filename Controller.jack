@@ -77,7 +77,7 @@ Also listen for keypresses from the user, and move the paddle left and right acc
       let ball = Ball.new(startX, 100, ballRadius);
 
       let xDelta = 1;
-      let yDelta = 1;      
+      let yDelta = 2;      
 
       let ballInPlay = true; 	   
       while (ballInPlay) {
@@ -163,6 +163,20 @@ Return true if the ball is still in play.
 	// ball is moving down and hitting the paddle
 	if ((yDelta > 0) &  (bottomY > (254 - paddle.getHeight())) & (bottomX > (paddle.getLeftX() - 1)) & (bottomX < (paddle.getRightX() + 1)) ) {
 	   let yDelta = -yDelta;
+	   // let's increase the angle if the ball is hitting the paddle near one of the ends
+	   if (paddle.isNearEnd(bottomX)) {
+	      if (xDelta > 0) {
+	         let xDelta = 2;
+	      } else {
+	         let xDelta = -2;
+	      }
+           } else {
+	      if (xDelta > 0) {
+	         let xDelta = 1;
+	      } else {
+	         let xDelta = -1;
+              }
+           }
 	} else {
 	  // ball is hitting the ground
 	   if (bottomY > 254) {
