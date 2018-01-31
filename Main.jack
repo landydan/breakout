@@ -39,7 +39,7 @@ class Main {
 	   do Sys.wait(500);
 
 	   do Output.moveCursor(0,0);
-	   let message = "Enter integer between 10 and 511 for paddle width (try 80)";
+	   let message = "Enter integer between 10 and 511 for paddle width (try 100)";
 	   let paddleWidth = Keyboard.readInt(message);
 	   do Output.moveCursor(2,0);
 	   let message = "Enter integer between 0 and 50 for delay (try 20)";

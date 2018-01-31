@@ -21,8 +21,7 @@ class Wall {
 
    constructor Wall new(int r, int bh) {
       // choose a width that's a divisor of 512, for simplicity
-      // harcoding the width at 16 because it's a convenient number for graphics optimization
-      let brickWidth = 16;
+      let brickWidth = 32;
       let bricksPerRow = 512/brickWidth;
 
       // also hardcoding the space above the wall, for now
@@ -128,5 +127,8 @@ class Wall {
       return;
    }
 
+   method int getBottomY() {
+      return bottomY;
+   }
 }
 

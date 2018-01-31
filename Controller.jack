@@ -27,7 +27,7 @@ Build the wall and the paddle and set initial parameters
       let rightKey = 132;
 
       let paddle = Paddle.new(paddleWidth, paddleHeight);
-      let wall = Wall.new(5, 8);
+      let wall = Wall.new(4, 16);
       let ballRadius = 8;
       return this;
    }
@@ -68,15 +68,16 @@ Also listen for keypresses from the user, and move the paddle left and right acc
    method void playOneBall() {
       var char key;  
       var boolean ballInPlay, exit;
-      var int startX;
+      var int startX, startY;
       
 
-      // position the ball above the left edge of the paddle
+      // position the ball above the left edge of the paddle, just below the wall
       let startX = paddle.getLeftX();
       if (startX < (ballRadius + 1)) {
          let startX = ballRadius + 1;
       }
-      let ball = Ball.new(startX, 100, ballRadius);
+      let startY = wall.getBottomY() + ballRadius + 1;
+      let ball = Ball.new(startX, startY, ballRadius);
 
       let xDelta = 1;
       let yDelta = 2;      
