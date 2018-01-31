@@ -18,9 +18,11 @@ class Main {
 	let newGame = true;
 	while (newGame) {
 	   do Printer.showMessage(0, "BREAKOUT!");
-	   do Printer.showMessage(2, "Use the left and right arrow keys to move the paddle.");
-	   do Printer.showMessage(4, "The angle of bounce depends on where you hit the ball.");
-	   do Printer.showMessage(6, "Press any key to continue.");	
+	   do Printer.showMessage(2, "Try to destroy the wall by bouncing the ball off it.");
+	   do Printer.showMessage(4, "Use the left and right arrow keys to move the paddle.");
+	   do Printer.showMessage(6, "The ends of the paddle impart a steeper angle to the ball.");
+	   do Printer.showMessage(8, "The game ends when the wall is gone, or you use up 3 balls.");
+	   do Printer.showMessage(10, "Press any key to continue.");	
 
 	   do Main.waitForKey();
 	   do Screen.clearScreen();
@@ -29,6 +31,7 @@ class Main {
 	   do Output.moveCursor(0,0);
 	   let message = "Enter integer between 10 and 511 for paddle width (try 80)";
 	   let paddleWidth = Keyboard.readInt(message);
+	   do Output.moveCursor(2,0);
 	   let message = "Enter integer between 0 and 50 for delay (try 20)";
 	   let delay = Keyboard.readInt(message);
 	   do message.dispose();
@@ -58,7 +61,7 @@ class Main {
 	}
 	do Screen.clearScreen();
 	do Printer.showMessage(0, "GOODBYE!");
-	do Sys.wait(2000);
+	do Sys.wait(1000);
       	return;
     }
 

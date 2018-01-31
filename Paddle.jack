@@ -72,14 +72,16 @@ class Paddle {
       return (x + width - 1);
    }
 
-   // let's define "near the end" as being within the first or last quarter of the paddle width
+   // Let's define "near the end" as being within the first or last quarter of the paddle width.
+   // Note that this method does not check that the point is within the boundaries of the paddle --
+   // that is left to the caller.
    method boolean isNearEnd(int inX) {
       var boolean leftEnd, rightEnd;
       var int quarterDistance;
 
       let quarterDistance = (width/4);
-      let leftEnd = ((inX > (x - 1)) & (inX < (x + quarterDistance)));
-      let rightEnd = ((inX < (getRightX() + 1)) & (inX > (getRightX() - quarterDistance)));
+      let leftEnd = (inX < (x + quarterDistance));
+      let rightEnd = (inX > (getRightX() - quarterDistance));
       return (leftEnd | rightEnd);
    }
 
